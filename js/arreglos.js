@@ -145,6 +145,7 @@ var arreglo =  mensaje.split(", ");
 var platillosHTML= document.querySelectorAll(".platillos p");
  //este elemento tiene todo el contenido de la etiqueta, sin todas las propiedades 
 var platillosHTML= Array.from(document.querySelectorAll(".platillos p"));
+//function con map nos sirve para 
 var platillos = platillosHTML.map( platillo => platillo.textContent);
 console.log("desde html",platillos);
 /************************************************************************
@@ -249,4 +250,198 @@ console.log("hay platillos abajo de 20?: ", resultado);
  * entender el DOM y el BOM 
  * PROPIEDADES y metodos de DOM
  * propiedades y metodos del BOM
+ */
+/****************************************************
+ * el document  
+ * 
+ * se explicara los elements by tag name
+ * te permite obtener los elememntos html por etiquetas
+ * 
+ *///
+ //incializamos 4 variables, de tipo document. donde obtenemos elementos por 
+ //ID, etiqueta, classe 
+var boton= document.getElementById("boton");
+var fondolorem = document.getElementById("lorem");
+//obtenemos las etiquetas existentes p, pero ademas trae todaaaal la informacion y propiedades de esa etiqueta
+var todosLosParrafos = document.getElementsByTagName('p')[5].textContent;
+//text content trae solo esa propiedad de nuestra atiqueta con  class parrafo3
+var parrrafoPorClase= document.getElementsByClassName("parrafo3")[0].textContent;
+var foto;
+
+//invocamos las funciones de ejemplo para cada una 
+boton.addEventListener('click', function () {
+    //imprimimos en consola el contenido del nnuestras etiquetas seleccionadas
+    console.log(todosLosParrafos);
+    console.log(parrrafoPorClase);
+
+    //ademas cambiamos el aspecto fisico de nuestro boton 
+    boton.style.width= "200px";
+    boton.style.background= "#44bba4";
+    boton.style.color= "white";
+    boton.style.borderRadius= "5%";
+    boton.style.border= "0px";
+    boton.style.fontFamily= "verdana";
+    //si nuestro fondo con el id lorem
+    if(fondolorem.style.background=="black")
+    {   //cambiarlo a crayola
+       fondolorem.style.background="#e7bb41";
+    }
+    else{
+        fondolorem.style.background="black";
+    }
+    //podemos crear fotons
+    var foto = document.createElement("img");
+    foto.src= "./img/foto1.jpg"
+    foto.name= "foto1"
+    foto.width="400px";
+    document.body.appendChild(foto);
+});
+/***************************
+ * trabajando con el BOM browser object 
+ * con el objeto window
+ * vamos a obtener el objeto witdh u hight 
+ * para saber el ancho y largo de nuestra pagina al momento 
+ * 
+ */
+var alto = window.innerHeight;
+var ancho= window.innerWidth;
+console.log( "la pagina tiene un alto de :", alto);
+console.log("y un ancho de: ", ancho);
+//almacenaremos un datos en la local storage
+//recibe dons cadenas de texto, el primero es la key y el segundo el contenido
+localStorage.setItem("informacion_User","emmanuel morales hernandez");
+//declaramos una variable que recibe el contenido desde local estorage 
+var infoUser= localStorage.getItem("informacion_User");
+//imprimimos en pantalla
+console.log(infoUser);
+//ahora este contenido lo vamos a mandar a una etiqueta html
+//declaramos donde los queremos en un inicio
+var principal= document.getElementsByClassName("bom")[0];
+principal.innerHTML= infoUser;
+//para manipular la navegacion del browser
+window.history.back(3);
+window.history.forward();
+window.history.go(2);
+
+/**********************************************************************
+ * uso de fake rest api
+ * utilizando fetch
+ * vamor a declarar el boton con un listener, y ademas par agestionar el contenido de nuestro div contenedor__api
+ */
+
+var botonapli= document.getElementById("boton__api");
+var contenedorapi= document.getElementById("contenedor__api");
+//declaramos los post o la informacion que necesitamos
+var post= null;
+//le declaramos un event listener para que al daar click mande a llamar la informacion remotamente
+//se trabaja con promesas, despues de nuestro fetch().then()
+botonapli.addEventListener("click", function () {
+    console.log("clickeaste el boton api");
+   //con fetch trabajamos nuestra consulta 
+    fetch ("https://api.instantwebtools.net/v1/airlines")
+    .then( 
+        //jamamos un JSON
+        data => data.json()
+     ).then(
+         //damos formato a la informacion
+         data => {
+            post =data ;
+            //mandamos a consola la informacion
+            //console.log(post);
+         }
+     )
+});
+
+/***********************************************************************
+ * trabajar con programacion orientada a objetos
+ * en esta seccion se trabajara con las Classes, como se declaran
+ * como se invocan y como se utilizan, 
+ * los constructores, sus propiedades , y las clases padre e hijos
+ */
+//se inicia con class y con mayuscula al empezar
+class Producto{
+    constructor(numSerie){
+        this.numSerie = numSerie;
+        this.tiempoGarantia = 100;
+    }
+    //el atributo static nos permite acceder a la propiedad aunque no este declarado ningun objeto del tipo producto o pantalla
+    static get infoTienda(){
+        console.log("Productos de la tienta patito Inc");
+    }
+    set garantia(value){
+        this.tiempoGarantia -=value;
+    }
+    get garantia(){
+        return this.tiempoGarantia;
+    }
+}
+// indicamos que pantallas hereda de producto numserie
+class Pantallas extends Producto  {
+    constructor(numSerie,marca, modelo, pulgadas){
+        //con parentesis y llaves como si fuera una funcion
+        //atributos que hereda de Producto
+        super(numSerie);
+        //agregaremos las propiedades adelante
+        this.marca= marca;
+        this.modelo= modelo;
+        this.pulgadas=pulgadas;
+        //utilizamos this para garantizar que es dentro de la misma class
+    }
+    
+
+    //los metodos son todas aquellas cosas que pueden hacer 
+     encender()
+    {
+        console.log("la pantalla "+ this.modelo +", se encendio!");
+        //podemos acceder a garantia desde la clase hijo pantalla
+        this.garantia =1;   
+    }
+
+    //set y get
+    set peso(value){
+        this.kgs= value.trim(); 
+    } 
+    get peso(){
+        return this.kgs;
+    }
+
+}
+//declaramos una nueva variable de tipo Pantalla
+const tvSala = new Pantallas("12345","Master", "Oasis", 55);
+//una mas
+const tvCuarto = new Pantallas	("12345","Origin", "Artemis", 80);
+
+//llamamos a consola
+console.log(tvSala);
+console.log(tvCuarto);
+console.log(tvSala.encender());
+
+/**************************************************************
+ * uso de los errores con javaScript
+ * con try and catch
+ * 
+ */
+var valor1= 100;
+var valor2= 20;
+try {
+    
+    if( valor1> valor2){
+        console.log("mensaje de validacion: ", valor1,"es mayor que ", valor2);
+    }
+    else {
+        throw new Error("valores no validos" )
+    }
+} catch ( exception) {
+    console.log("valor no valido");
+    console.log(Error);
+}
+/***************************************************************
+ * depuracion de tu codigo en javascript
+ * al encotrarnos con promblemas debemos depurar nuestra aplicacion 
+ * debuggear nuestra aplicacion,
+ * utilizaremos nuestro navegador, en el inspector de aplicacion 
+ * en la pesataña de Sources. 
+ * en app.js podemos utilizar breakpoints
+ * que durante una condicion se detenga, y dar click en la linea de codigo deseada 
+ * 
  */
